@@ -1,0 +1,44 @@
+<!DOCTYPE HTML>
+<html>
+  <head>
+    <title>Upload files with JS</title>
+  </head>
+  <body>
+    <input type="file" id="files" name="files[]" multiple />
+    <output id="list"></output>
+
+    <script type="text/javascript">
+      /* 
+       * Check for the various File API support.
+       *
+       * File - an individual file; provides readonly information such as name, file size, mimetype, and a reference to the file handle.
+       * FileList - an array-like sequence of File objects. (Think <input type="file" multiple> or dragging a directory of files from the desktop).
+       * Blob - Allows for slicing a file into byte ranges.
+       */
+      if (window.File && window.FileReader && window.FileList && window.Blob) {
+        
+        /*
+         * Upload file basically
+         */
+        function handleFileSelect(evt) {
+          var files = evt.target.files; // FileList object
+
+          // files is a FileList of File objects. List some properties.
+          var output = [];
+          for (var i = 0, f; f = files[i]; i++) {
+            output.push('<li><strong>', escape(f.name), '</strong> (', f.type || 'n/a', ') - ',
+                        f.size, ' bytes, last modified: ',
+                        f.lastModifiedDate ? f.lastModifiedDate.toLocaleDateString() : 'n/a',
+                        '</li>');
+          }
+          document.getElementById('list').innerHTML = '<ul>' + output.join('') + '</ul>';
+        }
+
+        document.getElementById('files').addEventListener('change', handleFileSelect, false);
+
+      } else {
+        alert('The File APIs are not fully supported in this browser.');
+      }
+    </script>
+  </body>
+</html>
